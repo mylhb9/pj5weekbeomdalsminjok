@@ -22,4 +22,11 @@ public class FoodResponseDto {
         this.name = food.getName();
         this.price = food.getPrice();
     }
+    public Food toDto() {
+        return Food.builder()
+                .name(name)
+                .price(price)
+                .build();
+    }
+
 }

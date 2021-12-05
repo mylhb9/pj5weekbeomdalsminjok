@@ -2,6 +2,8 @@ package com.beom.beomdalsminjok.entity;
 
 
 import com.beom.beomdalsminjok.dto.restaurantdto.RestaurantRequestDto;
+import com.beom.beomdalsminjok.dto.restaurantdto.RestaurantResponseDto;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -32,5 +34,22 @@ public class Restaurant {
         this.minOrderFee = restaurantRequestDto.getMinOrderPrice();
 
     }
+
+    @Builder
+    public Restaurant(String name, int deliveryFee, int minOrderFee) {
+        this.name = name;
+        this.deliveryFee = deliveryFee;
+        this.minOrderFee = minOrderFee;
+    }
+
+    public RestaurantResponseDto toDto() {
+        return RestaurantResponseDto.builder()
+                .id(id)
+                .name(name)
+                .deliveryFee(deliveryFee)
+                .minOrderPrice(minOrderFee)
+                .build();
+    }
+
 
 }

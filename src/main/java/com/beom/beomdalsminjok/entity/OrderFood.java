@@ -4,6 +4,7 @@ package com.beom.beomdalsminjok.entity;
 import com.beom.beomdalsminjok.dto.orderdto.OrderFoodResponseDto;
 import com.beom.beomdalsminjok.dto.orderdto.OrderRequestDto;
 import com.beom.beomdalsminjok.dto.orderdto.OrderResponseDto;
+import com.beom.beomdalsminjok.validator.OrderValidator;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,9 +23,9 @@ public class OrderFood {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "ORDER_ID")
-    private Order order;
+//    @ManyToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "ORDER_ID")
+//    private Order order;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "FOOD_ID")
@@ -36,22 +37,20 @@ public class OrderFood {
     @Column
     private int quantity;
     @Builder
-    public OrderFood(Order order, Food food, int quantity) {
-        this.quantity = quantity;
+    public OrderFood(Food food, int quantity) {
+        this.quantity = OrderValidator.validateOrderFoodQuantity(quantity);
         this.food = food;
-        this.order = order;
-        this.price = quantity * food.getPrice();
+        this.price = OrderValidator.validateOrderFoodQuantity(quantity) * food.getPrice();
 
     }
-
-
-    public OrderResponseDto toOrderResponseDto(Order order,List< OrderFoodResponseDto> orderFoodResponseDto) {
-        return OrderResponseDto.builder()
-                .restaurantName(order.getRestaurant().getName())
-                .foods(orderFoodResponseDto)
-                .deliveryFee(order.getRestaurant().getDeliveryFee())
-                .totalPrice(order.getTotalprice())
+    public OrderFoodResponseDto toOrderFoodResponseDto() {
+        return OrderFoodResponseDto.builder()
+                .name(food.getName())
+                .quantity(quantity)
+                .price(price)
                 .build();
     }
+
+
 
 }

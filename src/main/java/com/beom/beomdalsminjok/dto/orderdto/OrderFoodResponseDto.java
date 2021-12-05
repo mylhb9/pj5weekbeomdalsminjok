@@ -2,6 +2,8 @@ package com.beom.beomdalsminjok.dto.orderdto;
 
 
 
+import com.beom.beomdalsminjok.entity.Food;
+import com.beom.beomdalsminjok.entity.OrderFood;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,5 +23,12 @@ public class OrderFoodResponseDto {
         this.name = name;
         this.quantity = quantity;
         this.price = price;
+    }
+
+    public OrderFood toOrderFoodResponseDto(Food food) {
+        return OrderFood.builder()
+                .food(food)
+                .quantity(quantity)
+                .build();
     }
 }

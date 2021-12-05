@@ -16,7 +16,12 @@ public class FoodRequestDto {
 
     private int price;
 
-
+    public Food toEntity() {
+        return Food.builder()
+                .name(name)
+                .price(price)
+                .build();
+    }
 
 
 }

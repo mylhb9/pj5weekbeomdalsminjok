@@ -7,6 +7,7 @@ import com.beom.beomdalsminjok.entity.Food;
 import com.beom.beomdalsminjok.entity.Restaurant;
 import com.beom.beomdalsminjok.repository.FoodRepository;
 import com.beom.beomdalsminjok.repository.RestaurantRepository;
+import com.beom.beomdalsminjok.validator.FoodValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,7 @@ public class FoodService {
         Restaurant restaurant = restaurantRepository.findById(id).orElseThrow(
                 ()->new IllegalArgumentException("해당 음식점이 없습니다")
         );
+        //음식점과 일치하는 음식 리스트
         List<Food> foodList  = foodRepository.findByRestaurant_Id(id);
         // 같은 음식이름 유효성 검사
         List<String> foodnames = new ArrayList<>();
@@ -33,31 +35,15 @@ public class FoodService {
         for( int i =0; i< foodDtoList.size(); i++) {
             foodDtonames.add(foodDtoList.get(i).getName());
         }
-        for (int i=0; i<foodDtoList.size(); i++) {
-            if(foodnames.contains(foodDtoList.get(i).getName())) {
-                throw new IllegalArgumentException("해당 음식점에 이미 같은 음식 이름이 존재합니다.");
-            }
-            if (foodDtoList.get(i).getPrice() < 100 || foodDtoList.get(i).getPrice() > 1000000) {
-                throw new IllegalArgumentException("최소주문 가격이 허용값을 벗어났습니다.");
-            }
-            if (foodDtoList.get(i).getPrice()%100 != 0) {
-                throw new IllegalArgumentException("최소주문 가격이 100원 단위가 아닙니다");
-            }
-        }
-        for (int i =0; i<foodDtonames.size()- 1; i++) {
-            for (int j=i+1; j<foodDtonames.size(); j++) {
-                if(foodDtonames.get(i).equals(foodDtonames.get(j))) {
-                    throw new IllegalArgumentException("해당 음식점에 이미 같은 음식 이름이 존재합니다.");
-                }
-            }
-        }
+        FoodValidator.checkFood1(foodDtoList, foodnames);
+        FoodValidator.checkFood2(foodDtonames);
+        //해당 음식점에 해당하는 음식 리스트 만들기
         List<Food> foods = new ArrayList<>();
         for (int i=0; i<foodDtoList.size(); i++) {
             foods.add(new Food(restaurant,foodDtoList.get(i)));
         }
         foodRepository.saveAll(foods);
     }
-
     //음식조회 서비스
     public List<FoodResponseDto> getAllFoods(Long id) {
         List<FoodResponseDto> foods = new ArrayList<>();

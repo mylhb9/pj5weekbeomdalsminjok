@@ -6,10 +6,7 @@ import com.beom.beomdalsminjok.dto.fooddto.FoodRequestDto;
 import com.beom.beomdalsminjok.dto.orderdto.OrderFoodRequestDto;
 import com.beom.beomdalsminjok.dto.orderdto.OrderFoodResponseDto;
 import com.beom.beomdalsminjok.dto.orderdto.OrderResponseDto;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.aspectj.weaver.ast.Or;
 
 import javax.persistence.*;
@@ -40,7 +37,13 @@ public class Food {
         this.restaurant = restaurant;
     }
 
-    public OrderFoodResponseDto toOrderFoodResponseDto() {
+    @Builder
+    public Food(String name, int price) {
+        this.name = name;
+        this.price = price;
+    }
+
+    public OrderFoodResponseDto toDto() {
         return OrderFoodResponseDto.builder()
                 .name(name)
                 .price(price)

@@ -1,6 +1,10 @@
 package com.beom.beomdalsminjok.entity;
 
 
+import com.beom.beomdalsminjok.dto.orderdto.OrderFoodResponseDto;
+import com.beom.beomdalsminjok.dto.orderdto.OrderResponseDto;
+import com.beom.beomdalsminjok.validator.OrderValidator;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -19,20 +23,24 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name ="RESTAURANT_ID")
-    private Restaurant restaurant;
+    @Column
+    private Long restaurantId;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "ORDERFODD_ID")
+    private List<OrderFood> orderFoods;
 
     @Column
     private int totalprice;
 
-    @OneToMany(mappedBy = "order")
-    List<OrderFood> orderFoods = new ArrayList<>();
-
-    public Order(Restaurant restaurant, int totalprice) {
-        this.restaurant = restaurant;
-        this.totalprice = totalprice;
+    @Builder
+    public Order(Long restaurantId, int totalprice, int deliveryFee, List<OrderFood> orderFoods, int minOrderPrice) {
+        this.restaurantId = restaurantId;
+        this.totalprice = OrderValidator.validateTotalprice(totalprice, deliveryFee, minOrderPrice);
+        this.orderFoods = orderFoods;
     }
+
+
 
 
 

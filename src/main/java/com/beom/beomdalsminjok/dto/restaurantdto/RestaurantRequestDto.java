@@ -1,5 +1,6 @@
 package com.beom.beomdalsminjok.dto.restaurantdto;
 
+import com.beom.beomdalsminjok.entity.Restaurant;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,5 +17,16 @@ public class RestaurantRequestDto {
     private int minOrderPrice;
 
     private int deliveryFee;
+
+
+    public Restaurant toEntity() {
+        return Restaurant.builder()
+                .name(name)
+                .deliveryFee(deliveryFee)
+                .minOrderFee(minOrderPrice)
+                .build();
+    }
+
+
 
 }

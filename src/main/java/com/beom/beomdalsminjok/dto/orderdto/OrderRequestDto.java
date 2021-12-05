@@ -1,6 +1,8 @@
 package com.beom.beomdalsminjok.dto.orderdto;
 
 
+import com.beom.beomdalsminjok.entity.Order;
+import com.beom.beomdalsminjok.entity.OrderFood;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,5 +23,14 @@ public class OrderRequestDto {
         this.foods = foods;
     }
 
+    public Order toEntity(List<OrderFood> orderFoods, int totalprice) {
+        return Order.builder()
+                .orderFoods(orderFoods)
+                .restaurantId(restaurantId)
+                .totalprice(totalprice)
+                .build();
+
+
+    }
 
 }
