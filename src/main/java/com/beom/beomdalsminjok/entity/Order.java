@@ -27,7 +27,7 @@ public class Order {
     private Long restaurantId;
 
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "ORDERFODD_ID")
+    @JoinColumn(name = "ORDERFOOD_ID")
     private List<OrderFood> orderFoods;
 
     @Column
